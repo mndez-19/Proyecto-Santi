@@ -1,0 +1,876 @@
+<<<<<<< HEAD
+:root {
+  --bg: #F1F4EE;
+  --bg-deep: #E4EBE0;
+  --sage: #6E9080;
+  --sage-light: #A8C3B4;
+  --sand: #EFE5CC;
+  --ink: #2F3E36;
+  --ink-soft: #5C6B62;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
+  background: #C9CFC7;
+  font-family: 'Karla', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.phone {
+  width: 375px;
+  min-height: 480px; /* Altura mínima para que no se vea angosta sin contenido */
+  background: var(--bg);
+  border-radius: 44px;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+  transition: min-height 0.4s ease;
+
+  /* Permite el scroll vertical y bloquea el horizontal */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Cuando se muestran las tarjetas de respuesta, el teléfono crece para acomodarlas */
+.phone.state-hablando {
+  min-height: 620px;
+}
+
+/* Oculta la barra de scroll visual en navegadores WebKit (Chrome, Safari, Edge) */
+.phone::-webkit-scrollbar {
+  display: none;
+}
+
+/* Oculta la barra de scroll visual en Firefox e IE */
+.phone {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.topbar {
+  position: relative; /* Permite anclar elementos en posiciones específicas dentro de la barra */
+  padding: 52px 28px 8px;
+  display: flex;
+  justify-content: center; /* Centra automáticamente el texto del nombre */
+  align-items: center;
+}
+
+.topbar .name {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 40px 32px 20px;
+  position: relative;
+}
+
+.orb-wrap {
+  width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  margin-bottom: 20px; /* Reducido de 40px a 20px */
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--sage-light);
+  opacity: 0;
+}
+
+.orb {
+  width: 148px; 
+  height: 148px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #85A896, var(--sage) 70%);
+  box-shadow: 0 8px 30px -6px rgba(110,144,128,0.55);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: white;
+  font-size: 38px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+  z-index: 2;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gear {
+  position: absolute; 
+  left: 28px; /* Cambiado de 'right: 28px;' a 'left: 28px;' para moverlo a la izquierda */
+  width: 34px; 
+  height: 34px;
+  background: transparent; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: var(--ink-soft);
+  font-size: 24px; 
+  cursor: pointer;
+}
+
+.state-reposo .orb { animation: breathe 4.2s ease-in-out infinite; }
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+.state-escuchando .ring { animation: pulse-ring 1.8s ease-out infinite; }
+.state-escuchando .ring:nth-child(2) { width: 148px; height: 148px; animation-delay: 0s; }
+.state-escuchando .ring:nth-child(3) { width: 148px; height: 148px; animation-delay: 0.6s; }
+.state-escuchando .ring:nth-child(4) { width: 148px; height: 148px; animation-delay: 1.2s; }
+
+@keyframes pulse-ring {
+  0% { width: 148px; height: 148px; opacity: 0.7; }
+  100% { width: 240px; height: 240px; opacity: 0; }
+}
+
+.state-escuchando .orb { animation: breathe 1.6s ease-in-out infinite; }
+.state-pensando .orb { animation: think 1.6s ease-in-out infinite; }
+
+@keyframes think {
+  0%, 100% { transform: scale(0.97); opacity: 0.85; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+.state-hablando .orb { animation: speak 0.9s ease-in-out infinite; }
+
+@keyframes speak {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.09); }
+}
+
+.status-label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.status-sub {
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-align: center;
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   NUEVAS TARJETAS DE RESPUESTA
+   ========================================= */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Separación entre las tarjetas */
+  width: 100%;
+  max-width: 290px;
+  margin-top: 0;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin-top 0.4s ease;
+}
+
+.cards-container.show {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 600px;
+  margin-top: 24px;
+}
+
+.advice-card {
+  background: var(--sand);
+  border-radius: 16px;
+  padding: 16px 20px;
+  width: 100%;
+  min-height: 70px;
+}
+
+.advice-card .tag {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 6px;
+}
+
+.advice-card .phrase {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 14px; /* Letra un poco más pequeña para que quepan dos tarjetas */
+  color: var(--ink);
+  line-height: 1.5; /* Aumentamos el interlineado para mejor lectura */
+  word-wrap: break-word; /* Obliga al texto largo a saltar a la siguiente línea */
+  overflow: hidden;
+}
+
+.bottom {
+  padding: 20px 28px 36px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+    background: var(--bg);
+  }
+  .phone {
+    width: 100vw;
+    min-height: 100vh;
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .topbar { 
+    padding: 24px 24px 8px; 
+  }
+}
+
+/* =========================================
+   ESTILOS DEL MENÚ LATERAL (SIDEBAR)
+   ========================================= */
+.sidebar-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(47, 62, 54, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 99;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0; 
+  left: -340px;
+  width: 100%;
+  max-width: 340px;
+  height: 100vh;
+  background: var(--bg);
+  box-shadow: 5px 0 30px rgba(0,0,0,0.2);
+  z-index: 100;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animación sobre la propiedad left */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: var(--sage);
+  color: white;
+}
+
+.sidebar-header h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  font-size: 32px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.sidebar-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--sage-light);
+  border-radius: 12px;
+  background: white;
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+}
+
+.save-btn {
+  margin-top: 10px;
+  padding: 14px;
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.save-btn:hover { background: var(--ink-soft); }
+.save-btn:active { transform: scale(0.98); }
+
+.feedback-msg {
+  font-size: 13px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 18px;
+}
+
+.sidebar-divider {
+  border: none;
+  border-top: 1.5px solid var(--sage-light);
+  margin: 4px 0;
+}
+
+.sidebar-subtitle {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.sobre-texto {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.historial-vacio {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.historial-item {
+  background: var(--sand);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.historial-fecha {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+
+.historial-situacion {
+  font-size: 13px;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.historial-consejo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sage);
+=======
+:root {
+  --bg: #F1F4EE;
+  --bg-deep: #E4EBE0;
+  --sage: #6E9080;
+  --sage-light: #A8C3B4;
+  --sand: #EFE5CC;
+  --ink: #2F3E36;
+  --ink-soft: #5C6B62;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
+  background: #C9CFC7;
+  font-family: 'Karla', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.phone {
+  width: 375px;
+  min-height: 480px; /* Altura mínima para que no se vea angosta sin contenido */
+  background: var(--bg);
+  border-radius: 44px;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+  transition: min-height 0.4s ease;
+
+  /* Permite el scroll vertical y bloquea el horizontal */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Cuando se muestran las tarjetas de respuesta, el teléfono crece para acomodarlas */
+.phone.state-hablando {
+  min-height: 620px;
+}
+
+/* Oculta la barra de scroll visual en navegadores WebKit (Chrome, Safari, Edge) */
+.phone::-webkit-scrollbar {
+  display: none;
+}
+
+/* Oculta la barra de scroll visual en Firefox e IE */
+.phone {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.topbar {
+  position: relative; /* Permite anclar elementos en posiciones específicas dentro de la barra */
+  padding: 52px 28px 8px;
+  display: flex;
+  justify-content: center; /* Centra automáticamente el texto del nombre */
+  align-items: center;
+}
+
+.topbar .name {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 40px 32px 20px;
+  position: relative;
+}
+
+.orb-wrap {
+  width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  margin-bottom: 20px; /* Reducido de 40px a 20px */
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--sage-light);
+  opacity: 0;
+}
+
+.orb {
+  width: 148px; 
+  height: 148px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #85A896, var(--sage) 70%);
+  box-shadow: 0 8px 30px -6px rgba(110,144,128,0.55);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: white;
+  font-size: 38px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+  z-index: 2;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gear {
+  position: absolute; 
+  left: 28px; /* Cambiado de 'right: 28px;' a 'left: 28px;' para moverlo a la izquierda */
+  width: 34px; 
+  height: 34px;
+  background: transparent; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: var(--ink-soft);
+  font-size: 24px; 
+  cursor: pointer;
+}
+
+.state-reposo .orb { animation: breathe 4.2s ease-in-out infinite; }
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+.state-escuchando .ring { animation: pulse-ring 1.8s ease-out infinite; }
+.state-escuchando .ring:nth-child(2) { width: 148px; height: 148px; animation-delay: 0s; }
+.state-escuchando .ring:nth-child(3) { width: 148px; height: 148px; animation-delay: 0.6s; }
+.state-escuchando .ring:nth-child(4) { width: 148px; height: 148px; animation-delay: 1.2s; }
+
+@keyframes pulse-ring {
+  0% { width: 148px; height: 148px; opacity: 0.7; }
+  100% { width: 240px; height: 240px; opacity: 0; }
+}
+
+.state-escuchando .orb { animation: breathe 1.6s ease-in-out infinite; }
+.state-pensando .orb { animation: think 1.6s ease-in-out infinite; }
+
+@keyframes think {
+  0%, 100% { transform: scale(0.97); opacity: 0.85; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+.state-hablando .orb { animation: speak 0.9s ease-in-out infinite; }
+
+@keyframes speak {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.09); }
+}
+
+.status-label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.status-sub {
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-align: center;
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   NUEVAS TARJETAS DE RESPUESTA
+   ========================================= */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Separación entre las tarjetas */
+  width: 100%;
+  max-width: 290px;
+  margin-top: 0;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin-top 0.4s ease;
+}
+
+.cards-container.show {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 600px;
+  margin-top: 24px;
+}
+
+.advice-card {
+  background: var(--sand);
+  border-radius: 16px;
+  padding: 16px 20px;
+  width: 100%;
+  min-height: 70px;
+}
+
+.advice-card .tag {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 6px;
+}
+
+.advice-card .phrase {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 14px; /* Letra un poco más pequeña para que quepan dos tarjetas */
+  color: var(--ink);
+  line-height: 1.5; /* Aumentamos el interlineado para mejor lectura */
+  word-wrap: break-word; /* Obliga al texto largo a saltar a la siguiente línea */
+  overflow: hidden;
+}
+
+.bottom {
+  padding: 20px 28px 36px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+    background: var(--bg);
+  }
+  .phone {
+    width: 100vw;
+    min-height: 100vh;
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .topbar { 
+    padding: 24px 24px 8px; 
+  }
+}
+
+/* =========================================
+   ESTILOS DEL MENÚ LATERAL (SIDEBAR)
+   ========================================= */
+.sidebar-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(47, 62, 54, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 99;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0; 
+  left: -340px;
+  width: 100%;
+  max-width: 340px;
+  height: 100vh;
+  background: var(--bg);
+  box-shadow: 5px 0 30px rgba(0,0,0,0.2);
+  z-index: 100;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animación sobre la propiedad left */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: var(--sage);
+  color: white;
+}
+
+.sidebar-header h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  font-size: 32px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.sidebar-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--sage-light);
+  border-radius: 12px;
+  background: white;
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+}
+
+.save-btn {
+  margin-top: 10px;
+  padding: 14px;
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.save-btn:hover { background: var(--ink-soft); }
+.save-btn:active { transform: scale(0.98); }
+
+.feedback-msg {
+  font-size: 13px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 18px;
+}
+
+.sidebar-divider {
+  border: none;
+  border-top: 1.5px solid var(--sage-light);
+  margin: 4px 0;
+}
+
+.sidebar-subtitle {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.sobre-texto {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.historial-vacio {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.historial-item {
+  background: var(--sand);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.historial-fecha {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+
+.historial-situacion {
+  font-size: 13px;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.historial-consejo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sage);
+>>>>>>> 16dc2c55da859f5eeb7c3e1686c13c82337e82a6
+}
