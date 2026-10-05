@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,6 +13,7 @@
 </head>
 <body>
 
+<!-- Pantalla principal (tipo mockup de celular): orbe para grabar + tarjetas de respuesta -->
 <div>
   <div class="phone state-reposo" id="phone">
     <div class="notch"></div>
@@ -112,141 +112,14 @@
         <div class="form-group">
             <h3 class="sidebar-subtitle">Sobre este proyecto</h3>
             <p class="sobre-texto">
-                Mentor de Santi es un asistente de voz pensado para apoyar, en el momento,
-                a una persona autista durante situaciones sociales o sensoriales difíciles.
-                Escucha lo que pasa alrededor y sugiere, en segundos, un consejo breve y una
-                frase concreta para responder con calma — usando el contexto real de su
-                familia y sus propias reglas de comunicación.
+                La aplicación es un asistente de voz que ayuda 
+                a identificar y verbalizar lo que ocurre, ofreciendo 
+                en segundos un consejo breve y una frase concreta 
+                para responder adecuadamente a la situación.
             </p>
         </div>
     </div>
 </div>
 
 </body>
-=======
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mentor de Santi</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-</head>
-<body>
-
-<div>
-  <div class="phone state-reposo" id="phone">
-    <div class="notch"></div>
-    <div class="topbar">
-      <!-- ID agregado para actualizar el nombre dinámicamente -->
-      <span class="name" id="userNameDisplay">Hola</span>
-      <!-- Icono y ID modificados -->
-      <div class="gear" id="menuBtn">☰</div>
-    </div>
-
-    <div class="stage">
-      <div class="orb-wrap">
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="orb" id="orb">👂</div>
-      </div>
-      
-      <div class="status-label" id="label">Toca para escuchar</div>
-      <div class="status-sub" id="sub">Voy a escuchar lo que pasa cerca tuyo</div>
-
-      <!-- Contenedor con tres tarjetas de respuesta dinámica -->
-      <div class="cards-container" id="cardsContainer">
-
-        <!-- Tarjeta 1: Situación detectada -->
-        <div class="advice-card">
-          <div class="tag" id="tag1">Santi: esto está pasando</div>
-          <div class="phrase" id="phrase1">...</div>
-        </div>
-
-        <!-- Tarjeta 2: Consejo -->
-        <div class="advice-card">
-          <div class="tag" id="tagConsejo">Consejo</div>
-          <div class="phrase" id="phraseConsejo">...</div>
-        </div>
-
-        <!-- Tarjeta 3: Acción a realizar -->
-        <div class="advice-card">
-          <div class="tag" id="tag2">Santi: di esto</div>
-          <div class="phrase" id="phrase2">...</div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="bottom">
-      <div class="hint" id="hint">Un toque para empezar</div>
-    </div>
-  </div>
-</div>
-
-<!-- ================= MENÚ LATERAL ================= -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2>Configuración</h2>
-        <span class="close-btn" id="closeSidebar">×</span>
-    </div>
-    
-    <div class="sidebar-content">
-        <div class="form-group">
-            <label for="inputUsuario">Nombre del Usuario:</label>
-            <input type="text" id="inputUsuario" placeholder="Ej: Santi">
-        </div>
-
-        <div class="form-group">
-            <label for="inputFamilia">Familia (nombres separados por coma):</label>
-            <textarea id="inputFamilia" rows="2" placeholder="Ej: Nombre Mamá, Nombre Hermano"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="inputPalabras">Palabras no agradables (separadas por coma):</label>
-            <textarea id="inputPalabras" rows="3" placeholder="Ej: grito, ruido, fuerte"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="inputInstrucciones">Instrucciones de comportamiento IA:</label>
-            <textarea id="inputInstrucciones" rows="5" placeholder="Ej: Háblale con tono calmado. No uses metáforas."></textarea>
-        </div>
-        
-        <button class="save-btn" id="saveConfigBtn">Guardar Cambios</button>
-        <div id="saveFeedback" class="feedback-msg"></div>
-
-        <hr class="sidebar-divider">
-
-        <div class="form-group">
-            <h3 class="sidebar-subtitle">Historial reciente</h3>
-            <div id="historialLista" class="historial-lista">
-                <p class="historial-vacio">Todavía no hay interacciones registradas.</p>
-            </div>
-        </div>
-
-        <hr class="sidebar-divider">
-
-        <div class="form-group">
-            <h3 class="sidebar-subtitle">Sobre este proyecto</h3>
-            <p class="sobre-texto">
-                Mentor de Santi es un asistente de voz pensado para apoyar, en el momento,
-                a una persona autista durante situaciones sociales o sensoriales difíciles.
-                Escucha lo que pasa alrededor y sugiere, en segundos, un consejo breve y una
-                frase concreta para responder con calma — usando el contexto real de su
-                familia y sus propias reglas de comunicación.
-            </p>
-        </div>
-    </div>
-</div>
-
-</body>
->>>>>>> 16dc2c55da859f5eeb7c3e1686c13c82337e82a6
 </html>
