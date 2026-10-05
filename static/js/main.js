@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let audioChunks = [];
   let isRecording = false;
   let nombreUsuarioActual = "Santi";
+  const audioPlayer = new Audio(); // se reutiliza para poder "desbloquearlo" en el toque inicial (necesario en móvil)
 
   // Textos e ícono del orbe para cada estado del flujo de voz.
   const states = {
@@ -37,6 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Un toque sobre el orbe empieza a grabar; otro toque mientras graba, para.
   orb.addEventListener('click', async () => {
+    // Desbloquea la reproducción de audio en móvil: el toque tiene que
+    // "tocar" el elemento de audio de forma inmediata; la respuesta real
+    // llega varios segundos después y los navegadores móviles bloquean
+    // el audio si se reproduce fuera de este gesto.
+    audioPlayer.play().catch(() => {});
+    audioPlayer.pause();
+
     if (phone.classList.contains('state-reposo') || phone.classList.contains('state-hablando')) {
         iniciarGrabacion();
     } else if (phone.classList.contains('state-escuchando')) {
@@ -120,9 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setState('hablando');
 
-        // 2. Reproducir el audio devuelto por el servidor
-        const audio = new Audio(data.audio_url + "?t=" + new Date().getTime()); 
-        audio.play().catch(err => {
+        // 2. Reproducir el audio devuelto por el servidor (mismo elemento
+        // desbloqueado en el toque inicial, así también suena en móvil)
+        audioPlayer.src = data.audio_url + "?t=" + new Date().getTime();
+        audioPlayer.play().catch(err => {
             console.error("El navegador bloqueó la reproducción automática del audio:", err);
         });
 
