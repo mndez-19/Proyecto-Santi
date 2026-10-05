@@ -67,16 +67,6 @@ El proyecto incluye un `Dockerfile` listo para desplegar en cualquier plataforma
 3. Configurar la variable de entorno `GEMINI_API_KEY` en el panel de Render (nunca en el repo).
 4. Desplegar — Render construye la imagen, instala `ffmpeg` y expone la app por HTTPS automáticamente (necesario para que el navegador permita usar el micrófono).
 
-**Limitación conocida**: en el plan gratuito, el archivo `asistente_santi_memoria.json` (incluido el historial de interacciones) puede no persistir entre redeploys, ya que el disco no es permanente. Para una demo puntual no es un problema; para uso real continuo convendría mover esa persistencia a una base de datos o a un disco persistente.
-
-## Estado actual y próximos pasos
-
-- [x] Flujo completo de voz → consejo → voz, con contexto familiar personalizable — probado de punta a punta con audio real
-- [x] Historial de interacciones que retroalimenta las respuestas futuras de la IA
-- [ ] Persistencia de datos en una base de datos (hoy es un archivo JSON local)
-- [ ] Soporte multi-usuario (hoy está pensado para una sola persona por instancia)
-- [ ] Modo offline / respuesta local para cuando no hay conexión a internet
-
 **Nota sobre el reconocimiento de voz**: se usa la API gratuita de Google Speech a través de `SpeechRecognition`, que ocasionalmente no logra transcribir una grabación (ruido de fondo, pronunciación poco clara). Cuando eso pasa, la app lo muestra en pantalla y pide repetir — no es un error del sistema, es una limitación conocida del servicio gratuito.
 
 ## Créditos
